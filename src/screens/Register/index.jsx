@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ROUTES } from '../../Routes';
+import { ROUTES } from '../../constants/routes';
 import { getUsersLocalStorage, transformUser } from '../../utils/utils';
 
 function Register() {

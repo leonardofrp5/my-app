@@ -1,18 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-import { ROUTES } from '../../Routes';
+import { ROUTES } from '../../constants/routes';
+import SessionContext from '../../context/SessionContext';
+import { getUsersLocalStorage, getUserLocalStorage } from '../../utils/utils';
 
 function Login() {
   const [dataForm, setDataForm] = useState({ name: '', password: '' });
   const navigate = useNavigate();
+  const { addToCart } = useContext(SessionContext);
 
   const onSubmit = e => {
     e.preventDefault();
     const test = JSON.stringify(dataForm);
     localStorage.setItem('user', test);
-    navigate(ROUTES.HOME);
+    const users = getUsersLocalStorage();
+    const user = getUserLocalStorage();
+    const validateUsers = users.find(item => item.name === user?.name);
+    addToCart(!!validateUsers);
+
+    if (validateUsers) {
+      navigate(ROUTES.HOME);
+    } else {
+      alert('El usuario no existe');
+      navigate(ROUTES.REGISTER);
+      localStorage.removeItem('user');
+    }
   };
 
   const changeValue = e => {
